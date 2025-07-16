@@ -1,0 +1,107 @@
+This project is designed to reflect the kind of work we often do — combining backend logic, real-time features, frontend UX, and infrastructure setup. Please find the full details below.
+
+
+
+We suggest aiming to complete it over the course of 1 to 2 days. Feel free to prioritize clean code and clarity over feature-completeness — we’re more interested in how you think and structure things than in perfect polish.
+
+
+
+Let us know if you have any questions along the way. Looking forward to seeing what you build!
+
+
+
+Best,
+
+Osama Sayed
+
+⸻
+
+📦 Take-Home Challenge: Real-Time Feedback Board
+
+
+
+You’re building a tool to collect and manage real-time audience feedback for an event or webinar.
+
+⸻
+
+🔧 Core Features
+
+
+
+🎯 User Side
+
+	•	A page where users can submit feedback (e.g., name + message)
+
+	•	Submissions are sent to the backend and stored in a database
+
+
+
+🛠️ Admin Side
+
+	•	A dashboard that displays incoming messages in real-time (via WebSockets)
+
+	•	Ability to delete inappropriate messages
+
+	•	Display the total number of messages
+
+⸻
+
+💻 Tech Requirements
+
+	•	Frontend: Next.js (React + TypeScript)
+
+	•	Backend: Node.js (NestJS preferred, but Express is fine)
+
+	•	Database: PostgreSQL, SQLite, or similar
+
+	•	WebSockets: For real-time message delivery to admin clients
+
+	•	Docker: Full dockerized setup using docker-compose
+
+⸻
+
+✅ Minimum Requirements
+
+	•	Feedback form (with name + message)
+
+	•	Authentication for normal users/admins
+
+	•	Admin page that:
+
+	•		Receives messages in real-time
+
+	•		Deletes messages
+
+	•		Displays live message count
+
+	•	All services run with Docker Compose
+
+	•	At least:
+
+	•		1 unit test for backend logic
+
+	•		1 unit test for frontend component
+
+⸻
+
+✨ Bonus Ideas (Optional)
+
+	•	Add categories/tags to feedback (e.g., “Question”, “Praise”, “Issue”)
+
+	•	Auto-expire old messages (e.g., after 15 minutes)
+
+	•	Use Redis pub/sub for WebSocket delivery
+
+⸻
+
+📬 Submission Instructions
+
+	•	Push your code to a GitHub repository
+
+	•	Include a README.md with:
+
+	•		How to run the project locally using Docker
+
+	•		Any notes or assumptions
+
+	•		Provide a .env.example with any required environment variables
