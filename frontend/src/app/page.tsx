@@ -8,10 +8,13 @@ import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/context/AuthContext';
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    // Don't redirect while auth is still loading
+    if (authLoading) return;
+    
     // Redirect authenticated users to their appropriate dashboard
     if (user) {
       if (user.isAdmin) {
@@ -20,7 +23,19 @@ export default function Home() {
         router.push('/feedback');
       }
     }
-  }, [user, router]);
+  }, [user, router, authLoading]);
+
+  // Show loading while auth is being verified
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Show loading or landing page for unauthenticated users
   return (

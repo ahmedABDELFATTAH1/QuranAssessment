@@ -1,0 +1,20 @@
+{
+    "name": "feedback-board",
+    "version": "1.0.0",
+    "description": "Real-time feedback board application",
+    "scripts": {
+        "dev": "docker-compose up --build",
+        "dev:detach": "docker-compose up --build -d",
+        "stop": "docker-compose down",
+        "clean": "docker-compose down -v --rmi all",
+        "logs": "docker-compose logs -f",
+        "backend:dev": "cd backend && npm run start:dev",
+        "frontend:dev": "cd frontend && npm run dev",
+        "setup": "npm run backend:install && npm run frontend:install",
+        "backend:install": "cd backend && npm install",
+        "frontend:install": "cd frontend && npm install"
+    },
+    "devDependencies": {
+        "dotenv": "^16.0.0"
+    }
+}

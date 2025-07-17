@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
@@ -13,7 +13,7 @@ interface FeedbackFormData {
 }
 
 export default function FeedbackPage() {
-  const { user, getToken } = useAuth();
+  const { user, getToken, isLoading: authLoading } = useAuth();
   const router = useRouter();
   const [formData, setFormData] = useState<FeedbackFormData>({
     name: '',
@@ -24,9 +24,35 @@ export default function FeedbackPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  // Handle authentication redirect in useEffect
+  useEffect(() => {
+    // Don't redirect while auth is still loading
+    if (authLoading) return;
+    
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router, authLoading]);
+
+  // Show loading while auth is being verified
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render anything if user is not authenticated
   if (!user) {
-    router.push('/login');
-    return null;
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-xl">Redirecting to login...</div>
+      </div>
+    );
   }
 
   const handleSubmit = async (e: React.FormEvent) => {

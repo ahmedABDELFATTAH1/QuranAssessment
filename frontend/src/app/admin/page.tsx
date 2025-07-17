@@ -27,7 +27,7 @@ interface FeedbackNotification {
 }
 
 export default function AdminDashboard() {
-  const { user, getToken, logout } = useAuth();
+  const { user, getToken, logout, isLoading: authLoading } = useAuth();
   const router = useRouter();
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [notifications, setNotifications] = useState<FeedbackNotification[]>([]);
@@ -35,6 +35,9 @@ export default function AdminDashboard() {
   const [connectionStatus, setConnectionStatus] = useState('Disconnected');
 
   useEffect(() => {
+    // Don't redirect while auth is still loading
+    if (authLoading) return;
+    
     // Check if user is admin first
     if (!user) {
       router.push('/login');
@@ -68,7 +71,7 @@ export default function AdminDashboard() {
     // Initialize WebSocket connection
     const token = getToken();
     if (token) {
-      const newSocket = io('http://localhost:3001', {
+      const newSocket = io(process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'http://localhost:3009', {
         auth: {
           token: token,
         },
@@ -115,7 +118,19 @@ export default function AdminDashboard() {
         newSocket.close();
       };
     }
-  }, [user, getToken, router]);
+  }, [user, getToken, router, authLoading]);
+
+  // Show loading while auth is being verified
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Show loading or redirect if not admin
   if (!user?.isAdmin) {

@@ -31,6 +31,7 @@ export class FeedbackService {
     const feedback = this.feedbackRepository.create({
       ...createFeedbackDto,
       userId: userId,
+      username: user.username, // Store username directly
       user: user,
     });
 
@@ -42,6 +43,7 @@ export class FeedbackService {
       name: savedFeedback.name,
       message: savedFeedback.message,
       category: savedFeedback.category,
+      username: savedFeedback.username,
       createdAt: savedFeedback.createdAt,
       user: {
         id: user.id,

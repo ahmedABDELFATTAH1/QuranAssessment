@@ -30,7 +30,7 @@ RUN chown -R nestjs:nodejs /app
 USER nestjs
 
 # Expose the port the app runs on
-EXPOSE 3001
+EXPOSE 3009
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
