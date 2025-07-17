@@ -23,9 +23,6 @@ export class Feedback {
   @Column({ length: 50, nullable: true })
   category?: string;
 
-  @Column({ length: 50, nullable: true })
-  username?: string;
-
   @Column({ default: false })
   isInappropriate: boolean;
 

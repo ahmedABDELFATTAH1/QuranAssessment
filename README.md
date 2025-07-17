@@ -131,19 +131,18 @@ This project uses a centralized `.env` file at the root directory that is shared
 - **Backend API**: <http://localhost:3009>
 - **Database**: localhost:3307
 
-## Default Users
+## User Registration
 
-The application includes default test users (for development):
+The application uses auto-registration - new users are automatically created on first login:
 
-**Admin Users**:
+- Users with "admin" in their username are automatically granted admin privileges
+- All other users are regular users who can submit feedback
 
-- Username: `admin1`, Password: `12`
-- Username: `admin2`, Password: `12`
+## Application Flow
 
-**Regular Users**:
-
-- Username: `user1`, Password: `12`
-- Username: `user2`, Password: `12`
+1. **Login Page** (`/login`): Single login form for all users
+2. **User Dashboard** (`/feedback`): Submit feedback form for regular users  
+3. **Admin Dashboard** (`/admin`): Real-time feedback management for admins
 
 ## API Endpoints
 

@@ -9,7 +9,7 @@ function getAuthToken(request: NextRequest): string | null {
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const token = getAuthToken(request);
@@ -21,7 +21,8 @@ export async function DELETE(
       );
     }
 
-    await serverAPI.feedback.delete(parseInt(params.id), token);
+    const { id } = await params;
+    await serverAPI.feedback.delete(parseInt(id), token);
     return NextResponse.json({ message: 'Feedback deleted successfully' });
   } catch (error) {
     console.error('Delete feedback API error:', error);

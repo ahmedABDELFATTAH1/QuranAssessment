@@ -9,7 +9,7 @@ function getAuthToken(request: NextRequest): string | null {
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const token = getAuthToken(request);
@@ -21,7 +21,8 @@ export async function PATCH(
       );
     }
 
-    const data = await serverAPI.feedback.markInappropriate(parseInt(params.id), token);
+    const { id } = await params;
+    const data = await serverAPI.feedback.markInappropriate(parseInt(id), token);
     return NextResponse.json(data);
   } catch (error) {
     console.error('Mark inappropriate API error:', error);

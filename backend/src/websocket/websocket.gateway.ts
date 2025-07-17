@@ -65,19 +65,11 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
 
   // Method to notify admins of new feedback
   notifyAdminsNewFeedback(feedback: any) {
+    // Send notification to all clients in the admin room
     this.server.to('admin-room').emit('new-feedback', {
       type: 'NEW_FEEDBACK',
       data: feedback,
       timestamp: new Date().toISOString(),
-    });
-
-    // Also notify individual admin clients
-    this.adminClients.forEach((client) => {
-      client.emit('new-feedback', {
-        type: 'NEW_FEEDBACK',
-        data: feedback,
-        timestamp: new Date().toISOString(),
-      });
     });
   }
 

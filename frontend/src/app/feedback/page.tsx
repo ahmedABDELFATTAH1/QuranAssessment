@@ -24,6 +24,16 @@ export default function FeedbackPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  // Set username as default name when user is loaded
+  useEffect(() => {
+    if (user && formData.name === '') {
+      setFormData(prev => ({
+        ...prev,
+        name: user.username
+      }));
+    }
+  }, [user, formData.name]);
+
   // Handle authentication redirect in useEffect
   useEffect(() => {
     // Don't redirect while auth is still loading
@@ -94,10 +104,33 @@ export default function FeedbackPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md mx-auto">
-        <div className="text-center">
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <nav className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <div className="flex items-center">
+              <h1 className="text-xl font-bold text-gray-900">Feedback Board</h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-700">Welcome, {user.username}</span>
+              <Button onClick={() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/login';
+              }} variant="outline" size="sm">
+                Logout
+              </Button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <div className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md mx-auto">
+          <div className="text-center">
+            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
             Submit Feedback
           </h2>
           <p className="mt-2 text-sm text-gray-600">
@@ -174,14 +207,6 @@ export default function FeedbackPage() {
             </Button>
           </div>
         </form>
-
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => router.push('/')}
-            className="text-indigo-600 hover:text-indigo-500"
-          >
-            ← Back to Dashboard
-          </button>
         </div>
       </div>
     </div>

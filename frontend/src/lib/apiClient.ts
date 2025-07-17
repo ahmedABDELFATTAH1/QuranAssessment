@@ -1,5 +1,8 @@
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3009';
 
+// For server-side API calls (within Docker container)
+const SERVER_BACKEND_URL = process.env.SERVER_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3009';
+
 export class APIError extends Error {
   constructor(public status: number, message: string, public data?: unknown) {
     super(message);
@@ -96,8 +99,11 @@ class APIClient {
   }
 }
 
-// Create a singleton instance
+// Create a singleton instance for client-side API calls
 export const apiClient = new APIClient(BACKEND_URL);
+
+// Create a singleton instance for server-side API calls (within Docker container)
+const serverApiClient = new APIClient(SERVER_BACKEND_URL);
 
 // Feedback API methods for client-side use
 export const feedbackAPI = {
@@ -126,18 +132,18 @@ export const feedbackAPI = {
 export const serverAPI = {
   feedback: {
     create: (feedbackData: Record<string, unknown>, token: string) =>
-      apiClient.post('/feedback', feedbackData, true, token),
+      serverApiClient.post('/feedback', feedbackData, true, token),
     
-    getAll: (token: string) => apiClient.get('/feedback', true, token),
+    getAll: (token: string) => serverApiClient.get('/feedback', true, token),
     
     getById: (id: number, token: string) => 
-      apiClient.get(`/feedback/${id}`, true, token),
+      serverApiClient.get(`/feedback/${id}`, true, token),
     
     markInappropriate: (id: number, token: string) => 
-      apiClient.patch(`/feedback/${id}/mark-inappropriate`, undefined, true, token),
+      serverApiClient.patch(`/feedback/${id}/mark-inappropriate`, undefined, true, token),
     
     delete: (id: number, token: string) => 
-      apiClient.delete(`/feedback/${id}`, true, token),
+      serverApiClient.delete(`/feedback/${id}`, true, token),
   },
   
   auth: {

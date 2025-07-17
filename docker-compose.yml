@@ -66,6 +66,9 @@ services:
     environment:
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
       - NEXT_PUBLIC_WEBSOCKET_URL=${NEXT_PUBLIC_WEBSOCKET_URL}
+      - SERVER_API_URL=http://backend:3009
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
     ports:
       - "${FRONTEND_PORT}:3000"
     depends_on:
