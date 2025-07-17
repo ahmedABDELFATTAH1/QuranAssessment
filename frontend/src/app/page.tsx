@@ -1,8 +1,28 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/Button';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Home() {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect authenticated users to their appropriate dashboard
+    if (user) {
+      if (user.isAdmin) {
+        router.push('/admin');
+      } else {
+        router.push('/feedback');
+      }
+    }
+  }, [user, router]);
+
+  // Show loading or landing page for unauthenticated users
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
@@ -18,9 +38,9 @@ export default function Home() {
           </p>
           
           <div className="mt-10 flex items-center justify-center gap-6">
-            <Link href="/feedback">
+            <Link href="/login">
               <Button size="lg">
-                Submit Feedback
+                Get Started
               </Button>
             </Link>
             <Link href="/login">

@@ -58,7 +58,7 @@ services:
     container_name: feedback_frontend
     restart: unless-stopped
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:3001
+      - NEXT_PUBLIC_API_URL=http://localhost:3009
       - NEXT_PUBLIC_WS_URL=ws://localhost:3001
     ports:
       - "3000:3000"

@@ -11,7 +11,7 @@ import { useAuth } from '@/context/AuthContext';
 
 const loginSchema = z.object({
   username: z.string().min(1, 'Username is required').min(3, 'Username must be at least 3 characters'),
-  password: z.string().min(1, 'Password is required').min(6, 'Password must be at least 6 characters'),
+  password: z.string().min(1, 'Password is required'),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -34,8 +34,20 @@ export default function LoginForm() {
       setError('');
       await login(data);
       
-      // Redirect based on user role or to admin dashboard
-      router.push('/admin');
+      // Get user from localStorage to check role
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        // Redirect based on user role
+        if (user.isAdmin) {
+          router.push('/admin');
+        } else {
+          router.push('/feedback');
+        }
+      } else {
+        // Fallback redirection
+        router.push('/feedback');
+      }
     } catch (err) {
       console.error('Login error:', err);
       setError('Login failed. Please check your credentials.');
@@ -47,10 +59,10 @@ export default function LoginForm() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to Admin Dashboard
+            Sign in to your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Enter your credentials to access the feedback management system
+            Enter your credentials to access the feedback system
           </p>
         </div>
         
@@ -90,12 +102,7 @@ export default function LoginForm() {
           </Button>
         </form>
 
-        <div className="text-center">
-          <p className="text-sm text-gray-600">
-            Demo credentials: <br />
-            <span className="font-mono bg-gray-100 px-2 py-1 rounded">admin / admin123</span>
-          </p>
-        </div>
+       
       </div>
     </div>
   );

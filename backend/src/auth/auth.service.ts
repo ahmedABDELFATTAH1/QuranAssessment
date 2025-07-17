@@ -27,33 +27,71 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
-    const user = await this.validateUser(loginDto.username, loginDto.password);
-    
-    if (!user) {
-      throw new Error('Invalid credentials');
+    // First, try to find existing user
+    let existingUser = await this.userRepository.findOne({
+      where: { username: loginDto.username },
+    });
+
+    if (existingUser) {
+      // User exists, validate password
+      const isPasswordValid = await bcrypt.compare(loginDto.password, existingUser.password);
+      if (!isPasswordValid) {
+        throw new Error('Invalid credentials');
+      }
+      
+      // Return existing user data
+      const payload = {
+        username: existingUser.username,
+        sub: existingUser.id,
+        isAdmin: existingUser.isAdmin,
+      };
+
+      return {
+        access_token: this.jwtService.sign(payload),
+        user: {
+          id: existingUser.id,
+          username: existingUser.username,
+          isAdmin: existingUser.isAdmin,
+        },
+        isNewUser: false,
+      };
+    } else {
+      // User doesn't exist, create new user
+      const hashedPassword = await bcrypt.hash(loginDto.password, 10);
+      
+      // Check if username contains "admin" (case-insensitive) to determine admin status
+      const isAdmin = loginDto.username.toLowerCase().includes('admin');
+      
+      const newUser = this.userRepository.create({
+        username: loginDto.username,
+        password: hashedPassword,
+        isAdmin: isAdmin,
+      });
+
+      const savedUser = await this.userRepository.save(newUser);
+
+      const payload = {
+        username: savedUser.username,
+        sub: savedUser.id,
+        isAdmin: savedUser.isAdmin,
+      };
+
+      return {
+        access_token: this.jwtService.sign(payload),
+        user: {
+          id: savedUser.id,
+          username: savedUser.username,
+          isAdmin: savedUser.isAdmin,
+        },
+        isNewUser: true,
+      };
     }
-
-    const payload = {
-      username: user.username,
-      sub: user.id,
-      isAdmin: user.isAdmin,
-    };
-
-    return {
-      access_token: this.jwtService.sign(payload),
-      user: {
-        id: user.id,
-        username: user.username,
-        isAdmin: user.isAdmin,
-        email: user.email,
-      },
-    };
   }
 
   async findById(id: number): Promise<User | null> {
     return this.userRepository.findOne({
       where: { id },
-      select: ['id', 'username', 'isAdmin', 'email', 'createdAt'],
+      select: ['id', 'username', 'isAdmin', 'createdAt'],
     });
   }
 

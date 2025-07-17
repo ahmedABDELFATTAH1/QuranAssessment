@@ -21,11 +21,15 @@ export class AuthController {
     try {
       const result = await this.authService.login(loginDto);
       return {
-        message: 'Login successful',
+        message: result.isNewUser 
+          ? 'Account created and logged in successfully' 
+          : 'Login successful',
         token: result.access_token,
         user: result.user,
+        isNewUser: result.isNewUser,
       };
     } catch (error) {
+      console.error('Login error:', error);
       throw new HttpException(
         {
           message: 'Invalid credentials',
