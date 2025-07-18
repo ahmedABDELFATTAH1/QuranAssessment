@@ -10,12 +10,34 @@ A real-time feedback board application built with NestJS backend and Next.js fro
 - ⚡ **Real-time Updates**: WebSocket integration for instant admin notifications
 - 🐳 **Docker Support**: Full containerized setup with docker-compose
 - 🌐 **CORS Enabled**: Cross-origin requests supported
+- 🧪 **Testing**: Comprehensive unit tests for backend services with Jest
+
+## Demo
+
+🎥 **Live Demo**: [Watch the application in action](https://www.loom.com/share/3380c72667ab4f01953abc9ce9658840?sid=02192cca-fade-40ae-af43-e54582f80ce2)
+
+*See the complete feedback board workflow including user registration, feedback submission, admin dashboard, and real-time notifications*
+
+## Screenshots
+
+### Feedback Board Dashboard
+
+![Feedback Board](./user_feedback.png)
+
+*User feedback interface where users can submit feedback with name, message, and category*
+
+### Admin Dashboard
+
+![Admin Dashboard](./admin_dashboard.png)
+
+*Real-time admin dashboard showing all feedback with management capabilities*
 
 ## Tech Stack
 
-- **Frontend**: Next.js 14, TypeScript, Tailwind CSS, Socket.IO Client
+- **Frontend**: Next.js 15, TypeScript, Tailwind CSS, Socket.IO Client
 - **Backend**: NestJS, TypeScript, TypeORM, JWT, Socket.IO
 - **Database**: MySQL 8.0
+- **Testing**: Jest, @testing-library/react
 - **Infrastructure**: Docker, Docker Compose
 
 ## Environment Configuration
@@ -86,34 +108,6 @@ This project uses a centralized `.env` file at the root directory that is shared
    npm run clean
    ```
 
-## Development
-
-### Local Development (without Docker)
-
-1. **Install dependencies**:
-
-   ```bash
-   npm run setup
-   ```
-
-2. **Start the database** (using Docker):
-
-   ```bash
-   docker-compose up mysql -d
-   ```
-
-3. **Start backend**:
-
-   ```bash
-   npm run backend:dev
-   ```
-
-4. **Start frontend** (in another terminal):
-
-   ```bash
-   npm run frontend:dev
-   ```
-
 ### Available Scripts
 
 - `npm run dev` - Start all services with Docker Compose
@@ -157,27 +151,6 @@ The application uses auto-registration - new users are automatically created on 
 - `join-admin-room` - Join admin room for notifications
 - `new-feedback` - Real-time feedback notification to admins
 
-## Environment Variables Reference
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `DB_HOST` | Database host | localhost |
-| `DB_PORT` | Database port | 3307 |
-| `DB_USERNAME` | Database username | feedback_user |
-| `DB_PASSWORD` | Database password | feedback_password |
-| `DB_NAME` | Database name | feedback_board |
-| `MYSQL_ROOT_PASSWORD` | MySQL root password | rootpassword |
-| `NODE_ENV` | Node environment | development |
-| `BACKEND_PORT` | Backend server port | 3009 |
-| `PORT` | Alias for BACKEND_PORT | 3009 |
-| `FRONTEND_PORT` | Frontend server port | 3000 |
-| `FRONTEND_URL` | Frontend URL | <http://localhost:3000> |
-| `NEXT_PUBLIC_API_URL` | Frontend API URL | <http://localhost:3009> |
-| `WEBSOCKET_PORT` | WebSocket server port | 3009 |
-| `NEXT_PUBLIC_WEBSOCKET_URL` | Frontend WebSocket URL | <http://localhost:3009> |
-| `JWT_SECRET` | JWT signing secret | your-secret-key-change-this-in-production |
-| `JWT_EXPIRES_IN` | JWT expiration time | 24h |
-
 ## Project Structure
 
 ```
@@ -202,11 +175,206 @@ The application uses auto-registration - new users are automatically created on 
     └── package.json
 ```
 
-## Notes
+## Testing
 
-- The backend runs on port 3009 by default
-- The frontend runs on port 3000 by default
-- All services use the same centralized `.env` file
-- WebSocket and HTTP API share the same port (3009)
-- Auto-registration is enabled - users with "admin" in their username become admins
-- Real-time notifications are sent to admin clients via WebSocket
+The application includes comprehensive unit tests for both backend and frontend services using Jest.
+
+### Quick Test Commands
+
+```bash
+# Run all backend tests (from root directory)
+npm run test:backend
+
+# Run backend tests with coverage
+npm run test:backend:coverage
+
+# Run backend tests in watch mode
+npm run test:backend:watch
+
+# Run frontend tests
+npm run test:frontend
+
+# Run frontend tests in watch mode  
+npm run test:frontend:watch
+
+# Run all tests (backend + frontend)
+npm run test:all
+```
+
+### Backend Testing
+
+The backend includes comprehensive unit tests covering all core services and controllers.
+
+**Available Test Commands:**
+
+```bash
+# From root directory
+npm run test:backend                    # Run all backend tests
+npm run test:backend:coverage           # Run with coverage report
+npm run test:backend:watch              # Run in watch mode
+
+# From backend directory
+cd backend
+npm test                                # Run all tests
+npm run test:watch                      # Watch mode
+npm run test:cov                        # Coverage report
+npm run test:debug                      # Debug mode
+npm test -- --testPathPattern="auth"    # Run specific test pattern
+npm test -- --verbose                   # Verbose output
+```
+
+**Test Coverage:**
+
+- ✅ **AuthService Tests** (9 tests): Login validation, user creation, admin detection, password verification, error handling
+- ✅ **FeedbackService Tests** (10 tests): CRUD operations, user filtering, inappropriate marking, WebSocket notifications
+- ✅ **WebSocketGateway Tests** (6 tests): Connection handling, JWT authentication, admin room management, error scenarios
+- ✅ **Controller Tests**: Auth and Feedback controllers with proper dependency injection mocking
+
+**Current Test Results:**
+
+```text
+Backend:  ❌ FAILED (3 tests failing, 39 tests passing)
+Frontend: ✅ PASSED (5 tests passing)
+
+Issues: Controller tests need response format alignment
+Status: Core functionality tested, minor fixes needed
+```
+
+**Test Files:**
+
+- `src/auth/auth.service.spec.ts` - Authentication business logic
+- `src/auth/auth.controller.spec.ts` - Authentication endpoints
+- `src/feedback/feedback.service.spec.ts` - Feedback CRUD operations
+- `src/feedback/feedback.controller.spec.ts` - Feedback API endpoints
+- `src/websocket/websocket.gateway.spec.ts` - Real-time communication
+
+### Frontend Testing
+
+Frontend testing is implemented with Jest and React Testing Library for component testing.
+
+**Available Test Commands:**
+
+```bash
+# From root directory
+npm run test:frontend                   # Run all frontend tests
+npm run test:frontend:watch             # Watch mode
+npm run test:frontend:coverage          # Coverage report
+
+# From frontend directory
+cd frontend
+npm test                                # Run all tests
+npm run test:watch                      # Watch mode
+npm run test:coverage                   # Coverage report
+npm test -- --testNamePattern="Navigation"  # Run specific tests
+```
+
+**Test Coverage:**
+
+- ✅ **Navigation Component Tests** (3 tests): Authentication states, user roles, navigation links
+- ✅ **LoginForm Component Tests** (2 tests): Form rendering, basic form validation
+- 🔄 **Additional Tests**: More comprehensive component and integration tests can be added
+
+**Current Test Results:**
+
+```text
+Test Suites: 2 passed, 2 total
+Tests:       5 passed, 5 total
+Coverage:    Basic component rendering and props validation
+```
+
+**Frontend Test Setup:**
+
+- **Jest Configuration**: Optimized for Next.js 15 with TypeScript support
+- **Testing Library**: React Testing Library for component interaction testing
+- **Mocking**: Comprehensive mocks for Next.js router, API calls, and localStorage
+- **Coverage**: Basic test coverage for core components
+
+**Test Files:**
+
+- `src/components/__tests__/Navigation.test.tsx` - Navigation component behavior  
+- `src/components/forms/__tests__/LoginForm.test.tsx` - Login form rendering and validation
+
+**Notes:**
+
+- Frontend tests focus on component rendering and basic user interactions
+- API calls are mocked to prevent network dependencies during testing
+- Tests use simplified assertions for better maintainability
+- Complex integration tests can be added as needed for additional coverage
+
+### Test Scripts
+
+The project includes convenient test scripts for easy execution:
+
+```bash
+# Comprehensive testing (all tests)
+./test-all.sh
+
+# Backend testing with detailed output
+./test-backend.sh
+
+# Backend testing with coverage
+./test-backend.sh --coverage
+
+# Frontend testing with detailed output
+./test-frontend.sh
+
+# Frontend testing with coverage
+./test-frontend.sh --coverage
+
+# Frontend testing in watch mode
+./test-frontend.sh --watch
+```
+
+**Script Features:**
+
+- ✅ **Colored Output**: Clear visual feedback with success/failure indicators
+- 📊 **Coverage Reports**: Detailed code coverage analysis
+- 👀 **Watch Mode**: Automatic re-running on file changes
+- 📋 **Help Text**: Built-in command suggestions and tips
+- 🎯 **Summary Reports**: Comprehensive test result summaries
+
+## Quick Start
+
+1. **Clone and setup**:
+
+   ```bash
+   git clone <repository-url>
+   cd feedback-board
+   cp .env.example .env
+   # Update .env with your configuration
+   ```
+
+2. **Start the application**:
+
+   ```bash
+   docker-compose up --build
+   ```
+
+   This command will:
+   - Build and start all services (MySQL, Backend, Frontend)
+   - Set up the database with initial schema
+   - Make the application available at <http://localhost:3000>
+
+3. **Run tests** (optional):
+
+   ```bash
+   npm run test:all       # All tests
+   npm run test:backend   # Backend only
+   npm run test:frontend  # Frontend only
+   ```
+
+**Alternative Docker Commands:**
+
+```bash
+# Start in detached mode (background)
+docker-compose up --build -d
+
+# Stop all services
+docker-compose down
+
+# View logs
+docker-compose logs -f
+
+# Clean up (remove volumes and images)
+docker-compose down -v --rmi all
+```
