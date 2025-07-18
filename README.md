@@ -179,159 +179,18 @@ The application uses auto-registration - new users are automatically created on 
 
 The application includes comprehensive unit tests for both backend and frontend services using Jest.
 
-### Quick Test Commands
+### Test Commands
 
 ```bash
-# Run all backend tests (from root directory)
+# Test backend only
 npm run test:backend
 
-# Run backend tests with coverage
-npm run test:backend:coverage
-
-# Run backend tests in watch mode
-npm run test:backend:watch
-
-# Run frontend tests
+# Test frontend only  
 npm run test:frontend
 
-# Run frontend tests in watch mode  
-npm run test:frontend:watch
-
-# Run all tests (backend + frontend)
+# Test everything (backend + frontend)
 npm run test:all
 ```
-
-### Backend Testing
-
-The backend includes comprehensive unit tests covering all core services and controllers.
-
-**Available Test Commands:**
-
-```bash
-# From root directory
-npm run test:backend                    # Run all backend tests
-npm run test:backend:coverage           # Run with coverage report
-npm run test:backend:watch              # Run in watch mode
-
-# From backend directory
-cd backend
-npm test                                # Run all tests
-npm run test:watch                      # Watch mode
-npm run test:cov                        # Coverage report
-npm run test:debug                      # Debug mode
-npm test -- --testPathPattern="auth"    # Run specific test pattern
-npm test -- --verbose                   # Verbose output
-```
-
-**Test Coverage:**
-
-- ✅ **AuthService Tests** (9 tests): Login validation, user creation, admin detection, password verification, error handling
-- ✅ **FeedbackService Tests** (10 tests): CRUD operations, user filtering, inappropriate marking, WebSocket notifications
-- ✅ **WebSocketGateway Tests** (6 tests): Connection handling, JWT authentication, admin room management, error scenarios
-- ✅ **Controller Tests**: Auth and Feedback controllers with proper dependency injection mocking
-
-**Current Test Results:**
-
-```text
-Backend:  ❌ FAILED (3 tests failing, 39 tests passing)
-Frontend: ✅ PASSED (5 tests passing)
-
-Issues: Controller tests need response format alignment
-Status: Core functionality tested, minor fixes needed
-```
-
-**Test Files:**
-
-- `src/auth/auth.service.spec.ts` - Authentication business logic
-- `src/auth/auth.controller.spec.ts` - Authentication endpoints
-- `src/feedback/feedback.service.spec.ts` - Feedback CRUD operations
-- `src/feedback/feedback.controller.spec.ts` - Feedback API endpoints
-- `src/websocket/websocket.gateway.spec.ts` - Real-time communication
-
-### Frontend Testing
-
-Frontend testing is implemented with Jest and React Testing Library for component testing.
-
-**Available Test Commands:**
-
-```bash
-# From root directory
-npm run test:frontend                   # Run all frontend tests
-npm run test:frontend:watch             # Watch mode
-npm run test:frontend:coverage          # Coverage report
-
-# From frontend directory
-cd frontend
-npm test                                # Run all tests
-npm run test:watch                      # Watch mode
-npm run test:coverage                   # Coverage report
-npm test -- --testNamePattern="Navigation"  # Run specific tests
-```
-
-**Test Coverage:**
-
-- ✅ **Navigation Component Tests** (3 tests): Authentication states, user roles, navigation links
-- ✅ **LoginForm Component Tests** (2 tests): Form rendering, basic form validation
-- 🔄 **Additional Tests**: More comprehensive component and integration tests can be added
-
-**Current Test Results:**
-
-```text
-Test Suites: 2 passed, 2 total
-Tests:       5 passed, 5 total
-Coverage:    Basic component rendering and props validation
-```
-
-**Frontend Test Setup:**
-
-- **Jest Configuration**: Optimized for Next.js 15 with TypeScript support
-- **Testing Library**: React Testing Library for component interaction testing
-- **Mocking**: Comprehensive mocks for Next.js router, API calls, and localStorage
-- **Coverage**: Basic test coverage for core components
-
-**Test Files:**
-
-- `src/components/__tests__/Navigation.test.tsx` - Navigation component behavior  
-- `src/components/forms/__tests__/LoginForm.test.tsx` - Login form rendering and validation
-
-**Notes:**
-
-- Frontend tests focus on component rendering and basic user interactions
-- API calls are mocked to prevent network dependencies during testing
-- Tests use simplified assertions for better maintainability
-- Complex integration tests can be added as needed for additional coverage
-
-### Test Scripts
-
-The project includes convenient test scripts for easy execution:
-
-```bash
-# Comprehensive testing (all tests)
-./test-all.sh
-
-# Backend testing with detailed output
-./test-backend.sh
-
-# Backend testing with coverage
-./test-backend.sh --coverage
-
-# Frontend testing with detailed output
-./test-frontend.sh
-
-# Frontend testing with coverage
-./test-frontend.sh --coverage
-
-# Frontend testing in watch mode
-./test-frontend.sh --watch
-```
-
-**Script Features:**
-
-- ✅ **Colored Output**: Clear visual feedback with success/failure indicators
-- 📊 **Coverage Reports**: Detailed code coverage analysis
-- 👀 **Watch Mode**: Automatic re-running on file changes
-- 📋 **Help Text**: Built-in command suggestions and tips
-- 🎯 **Summary Reports**: Comprehensive test result summaries
 
 ## Quick Start
 
@@ -362,19 +221,3 @@ The project includes convenient test scripts for easy execution:
    npm run test:backend   # Backend only
    npm run test:frontend  # Frontend only
    ```
-
-**Alternative Docker Commands:**
-
-```bash
-# Start in detached mode (background)
-docker-compose up --build -d
-
-# Stop all services
-docker-compose down
-
-# View logs
-docker-compose logs -f
-
-# Clean up (remove volumes and images)
-docker-compose down -v --rmi all
-```
