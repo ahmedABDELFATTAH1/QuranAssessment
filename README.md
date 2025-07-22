@@ -94,30 +94,7 @@ This project uses a centralized `.env` file at the root directory that is shared
    ```bash
    # Start all services
    npm run dev
-
-   # Or start in detached mode
-   npm run dev:detach
-
-   # View logs
-   npm run logs
-
-   # Stop all services
-   npm run stop
-
-   # Clean up (remove volumes and images)
-   npm run clean
    ```
-
-### Available Scripts
-
-- `npm run dev` - Start all services with Docker Compose
-- `npm run dev:detach` - Start all services in detached mode
-- `npm run stop` - Stop all Docker services
-- `npm run clean` - Remove all containers, volumes, and images
-- `npm run logs` - View logs from all services
-- `npm run setup` - Install dependencies for both backend and frontend
-- `npm run backend:dev` - Start backend in development mode
-- `npm run frontend:dev` - Start frontend in development mode
 
 ## Application URLs
 
